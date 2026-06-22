@@ -1,4 +1,4 @@
-opencv-python
+opencv-python-headless
 pytesseract
 matplotlib
 ultralytics
@@ -6,3 +6,4 @@ fastapi
 pydentic 
 numpy
 python-dotenv
+uvicorn[standard]
