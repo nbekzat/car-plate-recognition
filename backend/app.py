@@ -1,9 +1,8 @@
 from fastapi import FastAPI, HTTPException, Request
 
 # from starlette.responses import Response
-from app.car_plate_detection import detect_with_ensemble
+from backend.car_plate_detection import detect_with_ensemble
 from http import HTTPStatus
-import json
 from PIL import Image
 import io
 import cv2
