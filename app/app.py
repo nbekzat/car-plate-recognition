@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
-from starlette.responses import Response
+
+# from starlette.responses import Response
 from app.car_plate_detection import detect_with_ensemble
 from http import HTTPStatus
 import json
@@ -40,7 +41,7 @@ app.add_middleware(
 
 @app.post("/detect-plate/", dependencies=[])
 @limiter.limit("5/minute")  # 10 requests per minute per IP
-async def detect_car_plate_num(request: Request) -> Response:
+async def detect_car_plate_num(request: Request):
 
     form = await request.form()
     file = form.get("file")
@@ -62,11 +63,9 @@ async def detect_car_plate_num(request: Request) -> Response:
         image_cv = cv2.cvtColor(np.array(image_pil), cv2.COLOR_RGB2BGR)
 
         text_list = detect_with_ensemble(image_cv)
-        return Response(
-            status_code=HTTPStatus.ACCEPTED, content=json.dumps({"message": text_list})
-        )
+        return {"status_code": HTTPStatus.ACCEPTED, "plate_number": text_list}
     except Exception as e:
-        return Response(
-            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-            content=json.dumps({"message": f"Failed to process image: {str(e)}"}),
-        )
+        return {
+            "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,
+            "message": f"Failed to process image: {str(e)}",
+        }

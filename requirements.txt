@@ -3,6 +3,6 @@ pytesseract
 matplotlib
 ultralytics
 fastapi
-pydentic
-slowapi
+pydentic 
+numpy
 python-dotenv
