@@ -8,3 +8,5 @@ numpy
 python-dotenv
 uvicorn[standard]
 slowapi
+python-multipart
+pillow
