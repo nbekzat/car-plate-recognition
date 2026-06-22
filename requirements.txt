@@ -1,0 +1,8 @@
+opencv-python
+pytesseract
+matplotlib
+ultralytics
+fastapi
+pydentic
+slowapi
+python-dotenv
