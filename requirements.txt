@@ -7,3 +7,4 @@ pydentic
 numpy
 python-dotenv
 uvicorn[standard]
+slowapi
