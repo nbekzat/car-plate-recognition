@@ -1,0 +1,42 @@
+# ==========================================
+# UV & Python Virtual Environments
+# ==========================================
+.venv/
+.python-version
+
+# ==========================================
+# FastAPI / Python Caching & Compiled Files
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ==========================================
+# Environment Variables & Secrets (CRITICAL)
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Tooling, Linters & Formatters (e.g., Ruff)
+# ==========================================
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/ 
+
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ==========================================
+# Build & Distribution (If packaging)
+# ==========================================
+build/
+dist/
+*.egg-info/
