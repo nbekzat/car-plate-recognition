@@ -1,12 +1,12 @@
 from fastapi import FastAPI, HTTPException, Request
-from backend.car_plate_detection import detect_with_ensemble
+from backend.car_plate_detection import detect_with_yolo
 from http import HTTPStatus
 from PIL import Image
 import io
 import cv2
 import numpy as np
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # import slowapi for API call limit
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -16,7 +16,7 @@ from slowapi.errors import RateLimitExceeded
 # CORS to limit API calls from vercel or spicific domain
 from fastapi.middleware.cors import CORSMiddleware
 
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB
 
 app = FastAPI()
 
@@ -25,12 +25,12 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-load_dotenv()
+# load_dotenv()
 print("setting CORS domains: ", os.getenv("frontend_domain"))
 # set CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("frontend_domain"),
+    allow_origins="https://portfolio-bekzat-kb.vercel.app",  # os.getenv("frontend_domain"),
     allow_methods=["POST"],  # only what you need
     allow_headers=["*"],
 )
@@ -59,8 +59,16 @@ async def detect_car_plate_num(request: Request):
         # convert PIL Image to OpenCV format (BGR numpy array)
         image_cv = cv2.cvtColor(np.array(image_pil), cv2.COLOR_RGB2BGR)
 
-        text_list = detect_with_ensemble(image_cv)
-        return {"status_code": HTTPStatus.ACCEPTED, "plate_number": text_list}
+        del image_bytes, image_pil, file
+
+        text_list, confidence_list = detect_with_yolo(image_cv)
+
+        return {
+            "status_code": HTTPStatus.ACCEPTED,
+            "plate_number": text_list,
+            "confidence": confidence_list,
+        }
+
     except Exception as e:
         return {
             "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,

@@ -1,12 +1,11 @@
-opencv-python-headless
-pytesseract
-matplotlib
+opencv-python-headless 
 ultralytics
 fastapi
-pydentic 
+# pydentic 
 numpy
-python-dotenv
+# python-dotenv
 uvicorn[standard]
 slowapi
 python-multipart
-pillow
+# pillow
+easyocr
