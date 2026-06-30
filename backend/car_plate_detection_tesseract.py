@@ -1,11 +1,19 @@
 import cv2
 from ultralytics import YOLO
 import pytesseract
+import os
 
-pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
+
+if os.getenv("RENDER"):
+    # Running on Render
+    pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+else:
+    pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
+
 pytesseract_config = (
     r"-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-\  --psm 8"
 )
+
 license_plate_detector = YOLO("models/license-plate-finetune-v1n.pt")
 
 
