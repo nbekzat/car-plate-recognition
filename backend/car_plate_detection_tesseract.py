@@ -1,13 +1,11 @@
 import cv2
 from ultralytics import YOLO
 import pytesseract
-import os
+import platform
 
 
-if os.getenv("RENDER"):
-    # Running on Render
-    pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-else:
+# if app is running from Mac
+if platform.system() == "Darwin":
     pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
 
 pytesseract_config = (
