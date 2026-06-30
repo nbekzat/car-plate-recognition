@@ -3,7 +3,7 @@ from ultralytics import YOLO
 import easyocr
 # pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
 # pytesseract_config = (
-#     r"-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\  --psm 8"
+#     r"-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-\  --psm 8"
 # )
 
 
@@ -48,9 +48,6 @@ def read_img(image_path: str):
 
 
 def detect_with_yolo(image):
-
-    # load pretrained YOLO
-    # license_plate_detector = YOLO("license_plate_detector.pt")
 
     results = license_plate_detector(image)
 

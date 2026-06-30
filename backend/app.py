@@ -1,12 +1,10 @@
 from fastapi import FastAPI, HTTPException, Request
-from backend.car_plate_detection import detect_with_yolo
+from backend.car_plate_detection_tesseract import detect_with_yolo
 from http import HTTPStatus
 from PIL import Image
 import io
 import cv2
 import numpy as np
-import os
-# from dotenv import load_dotenv
 
 # import slowapi for API call limit
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -25,8 +23,6 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# load_dotenv()
-print("setting CORS domains: ", os.getenv("frontend_domain"))
 # set CORS
 app.add_middleware(
     CORSMiddleware,

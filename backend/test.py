@@ -1,4 +1,4 @@
-from car_plate_detection import read_img, detect_with_yolo
+from backend.car_plate_detection_easyocr import read_img, detect_with_yolo
 
 
 def test():
