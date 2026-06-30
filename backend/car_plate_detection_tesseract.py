@@ -3,13 +3,14 @@ from ultralytics import YOLO
 import pytesseract
 import platform
 import torch
+# import matplotlib.pyplot as plt
 
 # if app is running from Mac
 if platform.system() == "Darwin":
     pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
 
 pytesseract_config = (
-    r"-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-\  --psm 8"
+    r"-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-\ --psm 6"
 )
 
 license_plate_detector = YOLO("models/license-plate-finetune-v1n.pt")
@@ -21,12 +22,19 @@ license_plate_detector = YOLO("models/license-plate-finetune-v1n.pt")
 #     plt.show()
 
 
+def save_img(img):
+    img.save("data/crop_car1.jpg")
+
+
 def detect_car_plate_text(car_plate_crop):
     print("detecting text from crop with tesseract...")
 
-    plate_number = pytesseract.image_to_string(
-        car_plate_crop, config=pytesseract_config
-    )
+    gray = cv2.cvtColor(car_plate_crop, cv2.COLOR_BGR2GRAY)
+    gray = cv2.resize(gray, None, fx=2, fy=2)
+
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    plate_number = pytesseract.image_to_string(thresh, config=pytesseract_config)
     print(plate_number)
 
     return plate_number
@@ -48,6 +56,7 @@ def detect_with_yolo(image):
 
     plate_number_list = []
     conf_list = []
+    plate_crop_img = []
     for result in results:
         boxes = result.boxes
 
@@ -60,6 +69,7 @@ def detect_with_yolo(image):
             plate_text = detect_car_plate_text(plate_crop)
             plate_number_list.append(plate_text)
             conf_list.append(conf)
+            plate_crop_img.append(plate_crop)
 
     del results
-    return plate_number_list, conf_list
+    return plate_number_list, conf_list, plate_crop_img

@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import gc
 import ctypes
+import base64
 
 # import slowapi for API call limit
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -63,7 +64,7 @@ async def detect_car_plate_num(request: Request):
     form = await request.form()
     file = form.get("file")
 
-    if not file.content_type.startswith("image/"):
+    if not file or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File provided is not an image.")
 
     try:
@@ -82,12 +83,23 @@ async def detect_car_plate_num(request: Request):
         del image_bytes, image_pil, file
 
         image_cv = resize_if_large(image_cv)
-        text_list, confidence_list = detect_with_yolo(image_cv)
+        text_list, confidence_list, plate_crop_list = detect_with_yolo(image_cv)
+
+        plate_images = []
+        for plate_crop in plate_crop_list:
+            success, encoded_image = cv2.imencode(".jpg", plate_crop)
+            if not success:
+                continue
+            plate_images.append(
+                "data:image/jpeg;base64,"
+                + base64.b64encode(encoded_image.tobytes()).decode("utf-8")
+            )
 
         return {
             "status_code": HTTPStatus.ACCEPTED,
             "plate_number": text_list,
             "confidence": confidence_list,
+            "plate_images": plate_images,
         }
 
     except Exception as e:
