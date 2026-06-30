@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 import pytesseract
 import platform
-
+import torch
 
 # if app is running from Mac
 if platform.system() == "Darwin":
@@ -43,7 +43,8 @@ def read_img(image_path: str):
 
 def detect_with_yolo(image):
 
-    results = license_plate_detector(image)
+    with torch.no_grad():
+        results = license_plate_detector(image)
 
     plate_number_list = []
     conf_list = []
@@ -60,4 +61,5 @@ def detect_with_yolo(image):
             plate_number_list.append(plate_text)
             conf_list.append(conf)
 
+    del results
     return plate_number_list, conf_list

@@ -5,6 +5,8 @@ from PIL import Image
 import io
 import cv2
 import numpy as np
+import gc
+import ctypes
 
 # import slowapi for API call limit
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -13,6 +15,10 @@ from slowapi.errors import RateLimitExceeded
 
 # CORS to limit API calls from vercel or spicific domain
 from fastapi.middleware.cors import CORSMiddleware
+
+import torch
+
+torch.set_num_threads(1)
 
 MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB
 
@@ -26,10 +32,28 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # set CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="https://portfolio-bekzat-kb.vercel.app",  # os.getenv("frontend_domain"),
+    allow_origins=[
+        "https://portfolio-bekzat-kb.vercel.app"
+    ],  # os.getenv("frontend_domain"),
     allow_methods=["POST"],  # only what you need
     allow_headers=["*"],
 )
+
+
+def cleanup_memory():
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+
+
+def resize_if_large(image_cv, max_dim=1280):
+    h, w = image_cv.shape[:2]
+    if max(h, w) > max_dim:
+        scale = max_dim / max(h, w)
+        image_cv = cv2.resize(image_cv, (int(w * scale), int(h * scale)))
+    return image_cv
 
 
 @app.post("/detect-plate/", dependencies=[])
@@ -57,6 +81,7 @@ async def detect_car_plate_num(request: Request):
 
         del image_bytes, image_pil, file
 
+        image_cv = resize_if_large(image_cv)
         text_list, confidence_list = detect_with_yolo(image_cv)
 
         return {
@@ -70,3 +95,5 @@ async def detect_car_plate_num(request: Request):
             "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,
             "message": f"Failed to process image: {str(e)}",
         }
+    finally:
+        cleanup_memory()

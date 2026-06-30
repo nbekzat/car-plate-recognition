@@ -53,6 +53,8 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "python-multipart" },
     { name = "slowapi" },
+    { name = "torch" },
+    { name = "torchvision" },
     { name = "ultralytics" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -69,6 +71,8 @@ requires-dist = [
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "python-multipart", specifier = ">=0.0.32" },
     { name = "slowapi", specifier = ">=0.1.10" },
+    { name = "torch", specifier = ">=2.12.1" },
+    { name = "torchvision", specifier = ">=0.27.1" },
     { name = "ultralytics", specifier = ">=8.4.70" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.49.0" },
 ]

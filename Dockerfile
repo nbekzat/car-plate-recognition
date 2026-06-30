@@ -22,4 +22,4 @@ COPY . .
 
 # Start the application
 # CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "10000"]
-CMD uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+CMD uvicorn backend.app:app --host 0.0.0.0 --port $PORT --workers 1
