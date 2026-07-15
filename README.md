@@ -4,6 +4,8 @@ This project performs automatic car license plate recognition from images. Uploa
 
 Live demo: https://bekzat.app/car-plate.html
 
+![Car Plate Recognition Demo](data/demo.png)
+
 ## Model
 
 The project uses a pre-trained YOLO11 model for license plate detection from Hugging Face:
