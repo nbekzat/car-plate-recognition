@@ -34,7 +34,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://portfolio-bekzat-kb.vercel.app"
+        "https://bekzat.app",
     ],  # os.getenv("frontend_domain"),
     allow_methods=["POST"],  # only what you need
     allow_headers=["*"],
@@ -58,7 +58,7 @@ def resize_if_large(image_cv, max_dim=1280):
 
 
 @app.post("/detect-plate/", dependencies=[])
-@limiter.limit("5/minute")  # 10 requests per minute per IP
+@limiter.limit("5/minute")  # 5 requests per minute per IP
 async def detect_car_plate_num(request: Request):
 
     form = await request.form()

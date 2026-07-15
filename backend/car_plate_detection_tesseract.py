@@ -16,16 +16,6 @@ pytesseract_config = (
 license_plate_detector = YOLO("models/license-plate-finetune-v1n.pt")
 
 
-# def show_img(img):
-#     plt.imshow(img, cmap="gray")
-#     plt.axis("off")
-#     plt.show()
-
-
-def save_img(img):
-    img.save("data/crop_car1.jpg")
-
-
 def detect_car_plate_text(car_plate_crop):
     print("detecting text from crop with tesseract...")
 
