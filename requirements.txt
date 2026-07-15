@@ -1,11 +1,9 @@
 opencv-python-headless 
 ultralytics
-fastapi
-# pydentic 
+fastapi 
 numpy
-# python-dotenv
+python-dotenv
 uvicorn[standard]
 slowapi
-python-multipart
-# pillow
+python-multipart 
 easyocr

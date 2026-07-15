@@ -15,8 +15,8 @@ __pycache__/
 # ==========================================
 # Environment Variables & Secrets (CRITICAL)
 # ==========================================
-.env
-.env.*
+# .env
+# .env.*
 !.env.example
 
 # ==========================================
@@ -40,5 +40,5 @@ htmlcov/
 build/
 dist/
 *.egg-info/
-data/
+# data/
 *.code-workspace

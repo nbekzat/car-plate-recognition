@@ -1,12 +1,7 @@
 import cv2
 from ultralytics import YOLO
 import easyocr
-# pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
-# pytesseract_config = (
-#     r"-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\  --psm 8"
-# )
-
-
+ 
 # def show_img(img):
 #     plt.imshow(img, cmap="gray")
 #     plt.axis("off")
